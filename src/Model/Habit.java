@@ -3,32 +3,27 @@ package Model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class Habit implements Serializable {
 
     public final String name;
     private final int max;
+    private final List<TimeData> history;
     private int current;
-    private ArrayList<TimeData> history;
 
-    // First Time
-    public Habit(String name, int max, ArrayList<TimeData> history) {
+    public Habit(String name, int max, List<TimeData> history) {
         this.name = name;
         this.max = max;
         this.current = 0;
         this.history = new ArrayList<>();
     }
 
-    // Otherwise
-    public Habit(String name, int max, int current) {
-        this.name = name;
-        this.max = max;
-        this.current = current;
-        this.history = new ArrayList<>();
+    static int clamp(int val, int max) {
+        return Math.max(0, Math.min(max, val));
     }
 
-    // Getters / Setters
     public int getCurrent() {
         return current;
     }
@@ -51,10 +46,6 @@ public class Habit implements Serializable {
 
     public void log(int currentState) {
         this.history.add(new TimeData(currentState));
-    }
-
-    static int clamp(int val, int max) {
-        return Math.max(0, Math.min(max, val));
     }
 
     @Override
@@ -80,7 +71,8 @@ public class Habit implements Serializable {
     }
 }
 
-class TimeData {
+// Data Class
+class TimeData implements Serializable {
 
     public final long timestamp;
     public final int value;
