@@ -1,19 +1,19 @@
 package Model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class Habit implements Serializable {
+public class Habit {
 
     public final String name;
     private final int max;
-    private final List<TimeData> history;
+    private final List<HabitRecord> history;
     private int current;
 
-    public Habit(String name, int max, List<TimeData> history) {
+    public Habit(String name, int max, List<HabitRecord> history) {
         this.name = name;
         this.max = max;
         this.current = 0;
@@ -45,7 +45,9 @@ public class Habit implements Serializable {
     }
 
     public void log(int currentState) {
-        this.history.add(new TimeData(currentState));
+        HabitRecord hr = new HabitRecord(currentState);
+        this.history.add(hr);
+
     }
 
     @Override
@@ -72,13 +74,13 @@ public class Habit implements Serializable {
 }
 
 // Data Class
-class TimeData implements Serializable {
+class HabitRecord implements Serializable {
 
-    public final long timestamp;
-    public final int value;
+    public final int score;
+    public final String date;
 
-    TimeData(int value) {
-        timestamp = new Date().getTime();
-        this.value = value;
+    public HabitRecord(int score) {
+        this.score = score;
+        this.date = LocalDateTime.now().toString();
     }
 }
